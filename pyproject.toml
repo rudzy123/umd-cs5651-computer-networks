@@ -1,0 +1,58 @@
+[project]
+name = "umd-networks"
+version = "0.1.0"
+description = "Localhost network-programming laboratory for UMD CS 5651."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+keywords = ["education", "networking", "tcp", "udp", "dns", "http"]
+classifiers = [
+    "Intended Audience :: Education",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: System :: Networking",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.13",
+    "pytest>=8.3",
+    "ruff>=0.8",
+]
+
+[project.scripts]
+umd-dns-lookup = "umd_networks.dns:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+umd_networks = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Server and client context managers have to stay nested around pytest.raises
+# and around a bind() that must run before the next socket exists.
+"tests/**" = ["SIM117"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["umd_networks"]
+warn_unreachable = true
